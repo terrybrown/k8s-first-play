@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 
 namespace WebApplication1.Controllers
 {
@@ -10,38 +11,35 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class RedisController : ControllerBase
     {
-        private string redisKey = "test-key";
+        private string _redisKey = "test-key";
+        private readonly IDatabase _db;
+        
+        public RedisController(IConnectionMultiplexer redisConnection)
+        {
+            _db = redisConnection.GetDatabase();
+        }
         
         // GET api/redis
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<string> Get()
         {
-            return new string[] {"value1", "value2"};
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
+            RedisValue value = _db.StringGet(_redisKey);
+            
+            return value.HasValue ? value.ToString() : string.Empty;
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post()
         {
+            _db.StringIncrement(_redisKey, flags: CommandFlags.FireAndForget);
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // DELETE api/values
+        [HttpDelete]
+        public void Delete()
         {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            _db.KeyDelete(_redisKey);
         }
     }
 }

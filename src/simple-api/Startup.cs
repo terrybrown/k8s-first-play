@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using StackExchange.Redis;
 
 namespace WebApplication1
 {
@@ -26,6 +27,12 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(new ConfigurationOptions
+            {
+                Ssl = false,
+                AbortOnConnectFail = false,
+                EndPoints = {"localhost", "6379"}
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
