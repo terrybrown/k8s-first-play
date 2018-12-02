@@ -1,6 +1,6 @@
 
 
-##Setting up Redis in a container
+## Setting up Redis in a container
 
 Run the docker container with redis in it.
 
@@ -14,7 +14,7 @@ Ensure you can connect to it:
 
 If you feel you want to validate the above two connections are the same just run `set test 1` in one, ensure you can `get test` in it before exiting, then connect to the other and run `get test` - you should find the value there as it's the same running instance of redis.
 
-##Running the App
+## Running the App
 
 Startup the app with `dotnet run`, and you can hit:
 `https://localhost:5001/api/redis` with an HTTP GET.
