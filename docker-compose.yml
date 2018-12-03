@@ -1,0 +1,19 @@
+version: '3'
+services:
+  web:
+    build: 
+      context: src/simple-api
+      dockerfile: Dockerfile
+    ports:
+      - "5001:80"
+    command:
+      - "dotnet simple-api.dll" 
+#    depends_on:
+#      - redis
+#  redis:
+#    container_name: redis
+#    ports:
+#      - "6379:6379"
+#    volumes:
+#      - ../data/redis:/data
+#    restart: always
