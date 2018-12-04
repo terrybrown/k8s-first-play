@@ -11,8 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
+using simpleApi.Helpers;
 
-namespace WebApplication1
+namespace simpleApi
 {
     public class Startup
     {
@@ -27,12 +28,22 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            // this line not really needed - it's only so I can inject the RedisConfig into the redis controller and output the host as part of the get action
+            services.Configure<RedisConfig>(options => Configuration.GetSection("Redis").Bind(options));
+            
+            // this gets me the config from the appsettings
+            var config = new RedisConfig();
+            Configuration.GetSection("Redis").Bind(config);
+            
             services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(new ConfigurationOptions
             {
                 Ssl = false,
                 AbortOnConnectFail = false,
-                EndPoints = {"localhost", "6379"}
+                EndPoints = {config.Host, config.Port}
             }));
+            
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

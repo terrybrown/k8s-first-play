@@ -8,12 +8,14 @@ services:
       - "5001:80"
     command:
       - "dotnet simple-api.dll" 
-#    depends_on:
-#      - redis
-#  redis:
-#    container_name: redis
-#    ports:
-#      - "6379:6379"
-#    volumes:
-#      - ../data/redis:/data
-#    restart: always
+    links:
+      - redis
+  redis:
+    container_name: simple-api-redis
+    image: redis:latest
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - ../data/redis:/data
+    restart: always
