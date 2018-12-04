@@ -32,7 +32,7 @@ namespace simpleApi.Controllers
             return Ok(new
             {
                 Value = (value.HasValue ? value.ToString() : string.Empty),
-                Host = _config.Host
+                RedisHost = _config.Host
             });
         }
 

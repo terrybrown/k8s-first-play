@@ -2,16 +2,18 @@
 ## App Premise
 
 3 endpoints on the API:
-1. GET /api/redis  
+1. `GET /api/redis`  
 this retrieves the values in a test key within redis
-2. POST /api/redis  
+2. `POST /api/redis`  
 this increments the counter against that key
-3. DELETE /api/redis  
+3. `DELETE /api/redis`  
 this removes the key so that you can reset
  
 Testing incrementing the key in redis can be achieved with the following command line loop.
 
-`while true; do curl --insecure -d '{}' -H "Content-Type: application/json" -X POST https://localhost:5001/api/redis; sleep 1; done`
+`while true; do curl --insecure -d '{}' -H "Content-Type: application/json" -X POST http://localhost:5001/api/redis; sleep 1; done`
+
+(change this to http if running in the container)
 
 This will fire off POST requests to thew endpoint, which should allow you to see the key incrementing at the GET endpoint above.
 
@@ -19,6 +21,7 @@ To reset the value in redis, run:
 
 `curl --insecure -X DELETE https://localhost:5001/api/redis`
 
+(change this to http if running in the container)
 
 ## Running the app - Docker
 `docker-compose up --build`
