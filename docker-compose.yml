@@ -8,6 +8,8 @@ services:
       - "5001:80"
     command:
       - "dotnet simple-api.dll" 
+    environment:
+      - Redis__Host=simple-api-redis
     links:
       - redis
   redis:
